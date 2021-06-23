@@ -1,5 +1,7 @@
 import * as THREE from "three";
 
+import "./style.css";
+
 // Canvas
 const canvas = document.querySelector("canvas.webgl");
 
