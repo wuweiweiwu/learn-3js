@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import gsap from "gsap";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 import "./style.css";
 
@@ -54,6 +55,19 @@ scene.add(axesHelper);
 
 // renderer.render(scene, camera);
 
+// mouse controls
+// const cursor = {
+//   x: 0,
+//   y: 0,
+// };
+
+// window.addEventListener("mousemove", (event) => {
+//   cursor.x = event.clientX / sizes.width - 0.5;
+//   cursor.y = -(event.clientY / sizes.height - 0.5);
+
+//   // console.log(cursor.x, cursor.y);
+// });
+
 /**
  * Animate
  */
@@ -62,6 +76,10 @@ const clock = new THREE.Clock();
 
 // gsap tween?
 // gsap.to(mesh.position, { duration: 1, delay: 1, x: 2 });
+
+// Controls
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;
 
 const tick = () => {
   // Update objects
@@ -84,9 +102,21 @@ const tick = () => {
   mesh.position.x = Math.cos(elapsedTime);
   mesh.position.y = Math.sin(elapsedTime);
 
-  camera.position.x = Math.cos(elapsedTime);
-  camera.position.y = Math.sin(elapsedTime);
-  camera.lookAt(mesh.position);
+  // camera.position.x = Math.cos(elapsedTime);
+  // camera.position.y = Math.sin(elapsedTime);
+  // camera.lookAt(mesh.position);
+
+  // Update camera
+  // camera.position.x = cursor.x * 5;
+  // camera.position.y = cursor.y * 5;
+  // camera.lookAt(mesh.position);
+
+  // camera.position.x = Math.sin(cursor.x * Math.PI * 2) * 2;
+  // camera.position.z = Math.cos(cursor.x * Math.PI * 2) * 2;
+  // camera.position.y = cursor.y * 3;
+  // camera.lookAt(mesh.position);
+
+  controls.update();
 
   // Render
   renderer.render(scene, camera);
