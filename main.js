@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import gsap from "gsap";
 
 import "./style.css";
 
@@ -12,6 +13,17 @@ const scene = new THREE.Scene();
 const geometry = new THREE.BoxGeometry(1, 1, 1);
 const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
 const mesh = new THREE.Mesh(geometry, material);
+
+// mesh.position.x = 0.7;
+// mesh.position.y = -0.6;
+// mesh.position.z = 1;
+
+// mesh.scale.x = 2;
+// mesh.scale.y = 0.25;
+// mesh.scale.z = 0.5;
+
+mesh.rotation.x = Math.PI * 0.25;
+mesh.rotation.y = Math.PI * 0.25;
 
 scene.add(mesh);
 
@@ -29,6 +41,58 @@ renderer.setSize(sizes.width, sizes.height);
 
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
 camera.position.z = 3;
+
+// camera.lookAt(new THREE.Vector3(0, -1, 0));
+camera.lookAt(mesh.position);
 scene.add(camera);
 
-renderer.render(scene, camera);
+/**
+ * Axes Helper
+ */
+const axesHelper = new THREE.AxesHelper(2);
+scene.add(axesHelper);
+
+// renderer.render(scene, camera);
+
+/**
+ * Animate
+ */
+// let time = Date.now();
+const clock = new THREE.Clock();
+
+// gsap tween?
+// gsap.to(mesh.position, { duration: 1, delay: 1, x: 2 });
+
+const tick = () => {
+  // Update objects
+  // mesh.rotation.y += 0.01;
+
+  // Time
+  // const currentTime = Date.now();
+  // const deltaTime = currentTime - time;
+  // time = currentTime;
+
+  // Update objects
+  // mesh.rotation.y += 0.001 * deltaTime;
+
+  const elapsedTime = clock.getElapsedTime();
+
+  // Update objects
+  mesh.rotation.y = elapsedTime;
+
+  // Update objects
+  mesh.position.x = Math.cos(elapsedTime);
+  mesh.position.y = Math.sin(elapsedTime);
+
+  camera.position.x = Math.cos(elapsedTime);
+  camera.position.y = Math.sin(elapsedTime);
+  camera.lookAt(mesh.position);
+
+  // Render
+  renderer.render(scene, camera);
+
+  // Call tick again on the next frame
+  window.requestAnimationFrame(tick);
+};
+
+tick();
