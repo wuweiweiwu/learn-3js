@@ -1,8 +1,14 @@
 import * as THREE from "three";
 import gsap from "gsap";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import * as dat from "dat.gui";
 
 import "./style.css";
+
+/**
+ * Debug
+ */
+const gui = new dat.GUI();
 
 // Canvas
 const canvas = document.querySelector("canvas.webgl");
@@ -30,11 +36,29 @@ const geometry = new THREE.SphereGeometry(1, 32, 32);
 // const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3);
 // geometry.setAttribute("position", positionsAttribute);
 
+const parameters = {
+  color: 0xff0000,
+  spin: () => {
+    gsap.to(mesh.rotation, { duration: 1, y: mesh.rotation.y + Math.PI * 2 });
+  },
+};
+
 const material = new THREE.MeshBasicMaterial({
   color: 0xff0000,
   wireframe: true,
 });
+
+gui.addColor(parameters, "color").onChange(() => {
+  material.color.set(parameters.color);
+});
+gui.add(parameters, "spin");
+
+gui.add(material, "wireframe");
+
 const mesh = new THREE.Mesh(geometry, material);
+
+gui.add(mesh.position, "y").min(-3).max(3).step(0.01).name("elevation");
+gui.add(mesh, "visible");
 
 // mesh.position.x = 0.7;
 // mesh.position.y = -0.6;
@@ -138,11 +162,11 @@ const tick = () => {
   const elapsedTime = clock.getElapsedTime();
 
   // Update objects
-  mesh.rotation.y = elapsedTime;
+  // mesh.rotation.y = elapsedTime;
 
-  // Update objects
-  mesh.position.x = Math.cos(elapsedTime);
-  mesh.position.y = Math.sin(elapsedTime);
+  // // Update objects
+  // mesh.position.x = Math.cos(elapsedTime);
+  // mesh.position.y = Math.sin(elapsedTime);
 
   // camera.position.x = Math.cos(elapsedTime);
   // camera.position.y = Math.sin(elapsedTime);
